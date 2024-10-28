@@ -1,3 +1,10 @@
+#CONTEXTO
+#Una tienda de videojuegos necesita un programa que les ayude a calcular
+#los costos y descuentos de sus ventas diarias. Cada videojuego tiene un
+#precio estándar, pero si el cliente compra más de tres videojuegos, recibe
+#un descuento especial. La tienda también quiere saber el total de ventas
+#al final del día y cuántos videojuegos en total se vendieron.
+
 # Declaración de variables y asignaciones iniciales
 precio_videojuego = 20  # Precio de cada videojuego
 total_ventas = 0
