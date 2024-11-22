@@ -3,11 +3,11 @@
 precio_dulce: .word 5           # Precio fijo por dulce (entero)
 mensaje_ingrese: .asciiz "Ingrese la cantidad de dulces comprados: "
 mensaje_total: .asciiz "Total de esta compra: $"
-mensaje_registrar: .asciiz "¿Desea registrar otra compra? (s/n): "
+mensaje_registrar: .asciiz "Â¿Desea registrar otra compra? (s/n): "
 mensaje_separador: .asciiz "\n------------------------------------------------------------\n"
-mensaje_total_ventas: .asciiz "Total de ventas del día: $"
+mensaje_total_ventas: .asciiz "Total de ventas del dÃ­a: $"
 mensaje_total_cantidad: .asciiz "Cantidad total de dulces vendidos: "
-mensaje_superado: .asciiz "¡Se ha superado la meta de ventas en el día!\n"
+mensaje_superado: .asciiz "Â¡Se ha superado la meta de ventas en el dÃ­a!\n"
 mensaje_no_superado: .asciiz "No se ha superado la meta de ventas :(\n"
 mensaje_saltolinea: .asciiz "\n"
 respuesta: .space 4         # Espacio para respuesta (s/n) (reserva solo para una letra (4byte))
@@ -20,10 +20,12 @@ cantidad_total_vendida: .word 0       # Total acumulado de dulces vendidos (ente
 .globl main
 
 main:
-    # Inicialización
+    # InicializaciÃ³n
     li $t0, 1                         # continuar = True (1)
 
-loop:
+# Ciclo while ------------------------------------------------------------------------------
+
+loop: 
     # Mostrar mensaje "Ingrese la cantidad de dulces comprados"
     li $v0, 4
     la $a0, mensaje_ingrese
@@ -63,7 +65,7 @@ loop:
     add $t5, $t5, $t1                 # cantidad_total_vendida += cantidad_comprados
     sw $t5, cantidad_total_vendida    # Guardar nueva cantidad_total_vendida
 
-    # Preguntar "¿Desea registrar otra compra? (s/n)"
+    # Preguntar "Â¿Desea registrar otra compra? (s/n)"
     li $v0, 4
     la $a0, mensaje_registrar
     syscall
@@ -71,7 +73,7 @@ loop:
     # Leer respuesta
     li $v0, 8                         # Leer cadena
     la $a0, respuesta
-    li $a1, 4                         # Máximo de 4 caracteres
+    li $a1, 4                         # MÃ¡ximo de 4 caracteres
     syscall
     
     #Salto de linea
@@ -80,17 +82,19 @@ loop:
     syscall         
 	
     # Verificar si la respuesta es 's'
-    lb $t6, respuesta                 # Cargar primer carácter de respuesta
+    lb $t6, respuesta                 # Cargar primer carÃ¡cter de respuesta
     li $t7, 's'
     beq $t6, $t7, loop                # Si respuesta == 's', continuar el ciclo
 
-# Mostrar resultados finales del día
+# end while -------------------------------------------------------------------------
+
+# Mostrar resultados finales del dÃ­a
     li $v0, 4
-    la $a0, mensaje_separador            # Línea separadora
+    la $a0, mensaje_separador            # LÃ­nea separadora
     syscall
 
     li $v0, 4
-    la $a0, mensaje_total_ventas      # "Total de ventas del día: $"
+    la $a0, mensaje_total_ventas      # "Total de ventas del dÃ­a: $"
     syscall
 
     li $v0, 1
@@ -98,7 +102,7 @@ loop:
     syscall
 
     li $v0, 4
-    la $a0, mensaje_separador            # Línea separadora
+    la $a0, mensaje_separador            # LÃ­nea separadora
     syscall
 
     li $v0, 4
@@ -110,25 +114,29 @@ loop:
     syscall
 
     li $v0, 4
-    la $a0, mensaje_separador            # Línea separadora
+    la $a0, mensaje_separador            # LÃ­nea separadora
     syscall
+
+# Sencencia if ------------------------------------------------------------------
 
 # Verificar si total_ventas supera 20
     lw $t4, total_ventas              # Cargar total_ventas
     li $t8, 20                        # Meta de ventas
     ble $t4, $t8, no_superado         # Si total_ventas <= 20, ir a no_superado
 
-    # Mostrar mensaje de éxito
+    # Mostrar mensaje de Ã©xito
     li $v0, 4
     la $a0, mensaje_superado
     syscall
     j fin                             # Saltar a fin
 
 no_superado:
-    # Mostrar mensaje de no éxito
+    # Mostrar mensaje de no Ã©xito
     li $v0, 4
     la $a0, mensaje_no_superado
     syscall
+
+# end if ---------------------------------------------------------------------------------
 
 fin:
     # Salida del programa
