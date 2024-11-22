@@ -1,30 +1,16 @@
 #CONTEXTO
 #Una tienda de dulces necesita un programa que les ayude a calcular
-#los costos y descuentos de sus ventas diarias. Cada dulce tiene un
-#precio estándar, pero si el cliente compra una cantidad equivalente a un numero primo de dulces recibe
-#un descuento especial. La tienda también quiere saber el total de ventas
-#al final del día y cuántos dulces en total se vendieron.
+#el total de sus ventas diarias, verificando si se cumple la meta de ventas en el dia. 
+#Cada dulce tiene un precio estándar de $5 y la meta de ventas es vender más de 20 dulces
 
 #Declaración de variables y asignaciones iniciales
 precio_dulce = 5        #Precio de cada dulce
 total_ventas = 0
 cantidad_total_vendida = 0
 
-#Función para verificar si la cantidad es primo
-def es_primo(n):
-    if n<2:
-        return False  
-    for i in range(2,n):
-        if (n%i) == 0:
-            return False
-    return True
-
 #Función para calcular el total de una compra con posible descuento
 def calcular_total_compra(precio, cantidad):
     total = precio * cantidad
-    descuento = 0.1  # 10% de descuento
-    if es_primo(cantidad):      #Si la cantidad es primo se le aplica el descuento del 10%
-        total = total - (total * descuento)
     return total
 
 #Ciclo para registrar varias compras en un solo día
@@ -45,5 +31,16 @@ while continuar:
     continuar = respuesta.lower() == 's'
 
 #Resultados finales del día
+print("------------------------------------------------------------")
 print(f"Total de ventas del día: ${total_ventas}")
+print("------------------------------------------------------------")
 print(f"Cantidad total de dulces vendidos: {cantidad_total_vendida}")
+print("------------------------------------------------------------")
+
+
+if(total_ventas>20):
+    print("¡Se ha superado la meta de ventas en el día!")
+    print("------------------------------------------------------------")
+else:
+    print("No se ha superado la meta de ventas :(")
+    print("------------------------------------------------------------")
