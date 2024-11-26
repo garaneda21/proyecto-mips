@@ -38,7 +38,7 @@ print(f"Cantidad total de dulces vendidos: {cantidad_total_vendida}")
 print("------------------------------------------------------------")
 
 
-if(total_ventas>20):
+if(cantidad_total_vendida>20):
     print("¡Se ha superado la meta de ventas en el día!")
     print("------------------------------------------------------------")
 else:
