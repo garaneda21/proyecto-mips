@@ -119,8 +119,8 @@ loop:
 
 # Sencencia if ------------------------------------------------------------------
 
-# Verificar si total_ventas supera 20
-    lw $t4, total_ventas              # Cargar total_ventas
+# Verificar si total_cantidad supera 20
+    lw $t4, cantidad_total_vendida    # Cargar total_cantidad
     li $t8, 20                        # Meta de ventas
     ble $t4, $t8, no_superado         # Si total_ventas <= 20, ir a no_superado
 
