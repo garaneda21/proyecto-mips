@@ -10,7 +10,7 @@ mensaje_total_cantidad: .asciiz "Cantidad total de dulces vendidos: "
 mensaje_superado: .asciiz "¡Se ha superado la meta de ventas en el día!\n"
 mensaje_no_superado: .asciiz "No se ha superado la meta de ventas :(\n"
 mensaje_saltolinea: .asciiz "\n"
-respuesta: .space 4         # Espacio para respuesta (s/n) (reserva solo para una letra (4byte))
+respuesta: .space 4         # Espacio para respuesta (s/n)
 
 # Variables
 total_ventas: .word 0                 # Total acumulado de ventas (entero)
@@ -34,11 +34,15 @@ loop:
     # Leer cantidad_comprados
     li $v0, 5                         # Leer un entero
     syscall
-    move $t1, $v0                     # Guardar cantidad_comprados en $t1
+    move $a1, $v0                     # Guardar cantidad_comprados en $a1 (segundo argumento)
+
+    # Cargar precio_dulce en $a0 (primer argumento)
+    lw $a0, precio_dulce
 
     # Llamar a calcular_total_compra
-    lw $t2, precio_dulce              # Cargar precio_dulce en $t2
-    mul $t3, $t1, $t2                 # total_compra = precio * cantidad
+    jal calcular_total_compra         # Resultado estará en $v0 (total_compra)
+
+    move $t3, $v0                     # Guardar total_compra en $t3
 
     # Mostrar "Total de esta compra: $"
     li $v0, 4
@@ -50,11 +54,10 @@ loop:
     move $a0, $t3                     # Cargar total_compra en $a0
     syscall
 
-    # Salto de linea
+    # Salto de línea
     li $v0, 4
     la $a0, mensaje_saltolinea
     syscall
-    
 
     # Actualizar total_ventas y cantidad_total_vendida
     lw $t4, total_ventas              # Cargar total_ventas en $t4
@@ -62,7 +65,7 @@ loop:
     sw $t4, total_ventas              # Guardar nuevo total_ventas
 
     lw $t5, cantidad_total_vendida    # Cargar cantidad_total_vendida en $t5
-    add $t5, $t5, $t1                 # cantidad_total_vendida += cantidad_comprados
+    add $t5, $t5, $a1                 # cantidad_total_vendida += cantidad_comprados
     sw $t5, cantidad_total_vendida    # Guardar nueva cantidad_total_vendida
 
     # Preguntar "¿Desea registrar otra compra? (s/n)"
@@ -76,10 +79,10 @@ loop:
     li $a1, 4                         # Máximo de 4 caracteres
     syscall
     
-    #Salto de linea
+    # Salto de línea
     li $v0, 4
     la $a0, mensaje_saltolinea
-    syscall         
+    syscall         	
 	
     # Verificar si la respuesta es 's'
     lb $t6, respuesta                 # Cargar primer carácter de respuesta
@@ -117,7 +120,7 @@ loop:
     la $a0, mensaje_separador            # Línea separadora
     syscall
 
-# Sencencia if ------------------------------------------------------------------
+# Secuencia if ------------------------------------------------------------------
 
 # Verificar si total_cantidad supera 20
     lw $t4, cantidad_total_vendida    # Cargar total_cantidad
@@ -142,3 +145,8 @@ fin:
     # Salida del programa
     li $v0, 10
     syscall
+
+# Función calcular_total_compra ----------------------------------------------------------
+calcular_total_compra:
+    mul $v0, $a0, $a1     # Multiplica precio ($a0) * cantidad ($a1)
+    jr $ra                # Retorna al llamador
